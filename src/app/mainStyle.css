@@ -1,0 +1,34 @@
+h1 {
+  text-align: center;
+  color: white;
+
+  padding-top: 20px;
+  padding-bottom: 150px;
+}
+
+.btnColumn nav {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;            /* space between buttons */
+  align-items: center;
+}
+
+.btnColumn a {
+  background-color: black;
+  border: 1px solid white;
+  padding: 10px;
+  border-radius: 8px;
+  color: white;
+  font-family: Sono;
+  font-size: 16px;
+  text-decoration: none;
+
+  margin-bottom: 10px;
+}
+
+.btnColumn a:hover {
+  background-color: white;
+  color: black;
+  cursor: pointer;
+}
+
