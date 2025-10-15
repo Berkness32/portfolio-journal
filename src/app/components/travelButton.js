@@ -27,7 +27,6 @@ function DeletePost() {
 }
 
 export default function HomeButtons() {
-
   return (
     <div className="btnColumn">
       <nav>
