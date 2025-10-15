@@ -1,7 +1,7 @@
 "use client";
 
-import "../mainStyle.css";
 import React, { useState } from 'react';
+import '../styles/createPost.css';
 
 export default function CreatePost() {
   const [text, setText] = useState('');

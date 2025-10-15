@@ -2,3 +2,8 @@ body {
   background-color: black;
   font-family: sono;
 }
+
+h1 {
+  text-align: center;
+  color: white;
+}

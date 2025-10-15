@@ -1,12 +1,6 @@
-h1 {
-  text-align: center;
-  color: white;
-
-  padding-top: 20px;
-  padding-bottom: 150px;
-}
-
 .btnColumn nav {
+  margin-top: 150px;
+
   display: flex;
   flex-direction: column;
   gap: 12px;            /* space between buttons */

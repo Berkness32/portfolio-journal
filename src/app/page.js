@@ -1,4 +1,4 @@
-import './mainStyle.css'; 
+import './styles/mainStyle.css'; 
 import HomeButtons from "./components/travelButton.js";
 
 
