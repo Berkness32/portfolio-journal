@@ -1,6 +1,111 @@
-textarea {
-  display: block;
-  margin: 0 auto;
-  font-family: Sono;
+form {
+  margin-top: 50px;
 }
 
+input {
+  display: block;
+  margin: 20px auto;
+  font-family: Sono;
+
+  border: 1px solid gray;
+  border-radius: 20px;
+  padding: 10px 25px;
+}
+
+.title-input {
+  font-size: 20px;
+  text-align: center;
+  background-color: black;
+  color: white;
+  border: 1px solid white;
+  width: 450px;
+}
+
+.date-input {
+  background-color: white;
+  color: black;
+  border: 1px solid black;
+}
+
+.date-and-tag {
+  display: flex;
+  align-items: center;
+  justify-content: center; 
+  gap: 10px;    
+  flex-wrap: wrap;  
+}
+
+.date-and-tag label,
+.date-and-tag input,
+.date-and-tag select {
+  margin: 10px 30px;
+}
+
+.tag-input {
+  font-family: Sono;
+  padding: 10px 20px;
+
+  background-color: black;
+  color: white;
+  border: 1px solid black;
+  border-radius: 20px;
+}
+
+.url-input {
+  display: block;
+  margin: 20px auto;
+  font-family: Sono;
+  padding: 10px 20px;
+  font-size: 12px;
+  width: 450px;
+
+  background-color: black;
+  color: white;
+  border-radius: 20px;
+}
+
+.image-input {
+  display: block;
+  margin: 20px auto;
+  font-family: Sono;
+  padding: 10px 20px;
+
+  background-color: black;
+  color: white;
+  border-radius: 20px;
+}
+
+img {
+  margin: 0 auto;
+  border-radius: 10px;
+}
+
+textarea {
+  display: block;
+  margin: 50px auto;
+  font-family: Sono;
+  padding: 10px 20px;
+
+  background-color: black;
+  color: white;
+  border: 1px solid white;
+  border-radius: 20px;
+}
+
+button {
+  display: block;
+  margin: 50px auto;
+  font-family: Sono;
+  padding: 10px 25px;
+
+  background-color: black;
+  color: white;
+  border: 1px solid white;
+  border-radius: 20px;
+}
+
+button:hover {
+  background-color: white;
+  color: black;
+  cursor: pointer;
+}

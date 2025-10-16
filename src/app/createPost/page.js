@@ -1,14 +1,17 @@
 "use client";
 
-import React, { useState } from 'react';
+import React from 'react';
+import PostForm from '../components/PostForm';
 import '../styles/createPost.css';
 
 export default function CreatePost() {
-  const [text, setText] = useState('');
 
-  const handleChange = (event) => {
-    setText(event.target.value);
-  };
+  async function handlePostSubmit(data) {
+    console.log("Received in page:", data);
+
+    // In the future, send it to AWS
+    // await fetch("/api/submit", { method: "POST", body: JSON.stringify(data) });
+  }
 
   return (
     <>
@@ -18,16 +21,8 @@ export default function CreatePost() {
 
       <hr />
 
-      <form>
-        <textarea
-          id="multiline-text"
-          value={text}
-          onChange={handleChange}
-          rows={5} // Optional: Specifies the visible number of lines
-          cols={40} // Optional: Specifies the visible width in average character widths
-          placeholder="Type your message here..." // Optional: Placeholder text
-        />
-      </form>
+      <PostForm onSubmit={handlePostSubmit} />
+
     </>
   );
 }
