@@ -1,5 +1,7 @@
 "use client";
 
+//import { addPost } from "../lib/dbClient";
+//import { v4 as uuidv4 } from "uuid"; // optional for generating unique IDs
 import { useEffect, useMemo, useState, } from "react";
 import Image from "next/image";
 
@@ -61,35 +63,55 @@ export default function PostForm({ onSubmit }) {
     }
   }
 
-  async function handleSubmit(e) {
-    e.preventDefault();
+async function handleSubmit(e) {
+  e.preventDefault();
 
-    const data = {
-      title: form.title.trim(),
-      date: form.date, // "YYYY-MM-DD"
-      description: form.description.trim(),
-      tag: form.tag,
-      link: form.link.trim() || null,
-      // We’ll pass the File separately (don’t try to JSON.stringify a File)
-      imageFile, // File | null
-    };
+  const payload = {
+    title: form.title.trim(),
+    date: form.date,             // "YYYY-MM-DD"
+    tag: form.tag,
+    link: form.link.trim() || "", 
+    description: form.description.trim(),
+  };
 
-    if (!data.title) {
-      alert("Please enter a title.");
-      return;
-    }
-    if (!isValidUrl(data.link || "")) {
-      alert("Please enter a valid link (or leave it blank).");
-      return;
-    }
-
-    console.log("Submitting:", data);
-
-    if (onSubmit) {
-      // Let the parent decide how to handle files (S3, etc.)
-      await onSubmit(data);
-    }
+  if (!payload.title) {
+    alert("Please enter a title.");
+    return;
   }
+  if (!isValidUrl(payload.link || "")) {
+    alert("Please enter a valid link (or leave it blank).");
+    return;
+  }
+
+  try {
+    const res = await fetch("/api/posts", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
+
+    if (!res.ok) {
+      const { error } = await res.json().catch(() => ({ error: "Unknown error" }));
+      throw new Error(error);
+    }
+
+    const { id } = await res.json(); // returned by server
+    alert(`Post saved! id: ${id}`);
+
+    // reset form
+    setForm({
+      title: "",
+      date: todayLocalYYYYMMDD(),
+      description: "",
+      tag: TAG_OPTIONS[0],
+      link: "",
+    });
+    setImageFile(null);
+  } catch (err) {
+    console.error("Save failed:", err);
+    alert(`Failed to save post: ${err.message}`);
+  }
+}
 
   return (
     <form onSubmit={handleSubmit}>
