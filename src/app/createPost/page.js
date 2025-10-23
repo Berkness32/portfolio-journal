@@ -2,7 +2,7 @@
 
 import React from 'react';
 import PostForm from '../components/PostForm';
-import '../styles/createPost.css';
+import Navbar from '../components/Navbar';
 
 export default function CreatePost() {
 
@@ -15,9 +15,8 @@ export default function CreatePost() {
 
   return (
     <>
-      <h1>
-        Create New Post
-      </h1>
+
+      <Navbar title={"Create New Post"} />
 
       <hr />
 

@@ -12,7 +12,7 @@ function CreatePost() {
 
 function EditPost() {
   return (
-    <Link href="/createPost">
+    <Link href="/editPost">
       Edit Post 
     </Link>
   );

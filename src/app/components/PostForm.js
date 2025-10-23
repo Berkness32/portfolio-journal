@@ -1,11 +1,7 @@
 "use client";
 
-//import { addPost } from "../lib/dbClient";
-//import { v4 as uuidv4 } from "uuid"; // optional for generating unique IDs
 import { useEffect, useMemo, useState, } from "react";
-import Image from "next/image";
 
-// Helper: format today's date in local time for <input type="date" />
 function todayLocalYYYYMMDD() {
   const d = new Date();
   const year = d.getFullYear();
@@ -14,7 +10,6 @@ function todayLocalYYYYMMDD() {
   return `${year}-${month}-${day}`;
 }
 
-// Example tag list (you can also pass this as a prop)
 const TAG_OPTIONS = ["Cloud", "3D Art", "Web", "Math", "Security", "Programming"];
 
 export default function PostForm({ onSubmit }) {

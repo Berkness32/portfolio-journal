@@ -1,3 +1,23 @@
+
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;  
+  position: relative;
+  margin: 25px 0;
+}
+
+.navbar h1 {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.navbar a {
+  text-decoration: none;
+  font-weight: bold;
+}
+
 form {
   margin-top: 50px;
 }
