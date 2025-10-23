@@ -12,7 +12,7 @@ function todayLocalYYYYMMDD() {
 
 const TAG_OPTIONS = ["Cloud", "3D Art", "Web", "Math", "Security", "Programming"];
 
-export default function PostForm({ onSubmit }) {
+export default function PostForm() {
   const [form, setForm] = useState({
     title: "",
     date: todayLocalYYYYMMDD(),

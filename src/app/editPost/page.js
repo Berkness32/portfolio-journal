@@ -5,36 +5,62 @@ import Navbar from "../components/Navbar";
 import "../styles/editPosts.css";
 
 export default function EditPost() {
+  const TAG_OPTIONS = ["Cloud", "3D Art", "Web", "Math", "Security", "Programming"];
+
   const [posts, setPosts] = useState([]);      // must be an array
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true); // explicit loading flag
+  const [tag, setTag] = useState(TAG_OPTIONS[0]);
 
-  useEffect(() => {
-    async function fetchPosts() {
+  useEffect(() => { 
+    const ac = new AbortController();
+    async function load() {
       try {
-        const res = await fetch("/api/posts?tag=Cloud&limit=5", { cache: "no-store" });
-        const data = await res.json();
-        console.log("Fetched data (raw):", data);
+        setLoading(true);
+        setError("");
+        
+        const res = await fetch(
+          `/api/posts?tag=${tag}&limit=5`, 
+          { cache: "no-store", signal: ac.signal }
+        );
 
+        const data = await res.json();
         if (!res.ok) throw new Error(data?.error || "Failed to fetch");
 
-        // normalize to an array no matter what the API returns
         const arr = Array.isArray(data) ? data : (data?.Items ?? []);
         setPosts(arr);
       } catch (err) {
-        console.error("Error fetching posts:", err);
-        setError(err.message || String(err));
+        if (err.name !== "AbortError") {
+          console.error("Error fetching posts:", err);
+          setError(err.message || String(err));
+        }
       } finally {
         setLoading(false);
       }
     }
-    fetchPosts();
-  }, []);
+
+    load()
+    return () => ac.abort();
+  }, [tag]);
 
   return (
     <>
       <Navbar title="Edit Post" />
       <hr />
+
+      <select
+        id="tag"
+        name="tag"
+        className="tag-input"
+        value={tag}
+        onChange={(e) => setTag(e.target.value)}
+      >
+        {TAG_OPTIONS.map((t) => (
+          <option key={t} value={t}>
+            {t}
+          </option>
+        ))}
+      </select>
 
       {loading && <p>Loading posts...</p>}
       {error && <p style={{ color: "crimson" }}>Error: {error}</p>}
