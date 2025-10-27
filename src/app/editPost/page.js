@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import Link from "next/link";
 import Navbar from "../components/Navbar";
 import "../styles/editPosts.css";
 
@@ -70,15 +71,17 @@ export default function EditPost() {
       {!loading && !error && posts.length > 0 && (
         <ul>
           {posts.map((p, i) => (
-            <li key={p.id ?? `${p.tag}-${p.date}-${i}`}>
-              <strong>{p.title ?? "(untitled)"}</strong>
-              {" — "}
-              {p.date ?? "(no date)"} {p.tag ? `· ${p.tag}` : ""}
-              <br />
-              <hr />
-              <br />
 
-              {p.description}
+            <li key={p.id ?? `${p.tag}-${p.date}-${i}`}>
+              <Link href={`/${p.id}`}>
+                <strong>{p.title ?? "(untitled)"}</strong> — {p.date ?? "(no date)"} {p.tag ? `· ${p.tag}` : ""}
+
+                <br />
+                <hr />
+                <br />
+
+                {p.description}
+              </Link>
             </li>
           ))}
         </ul>

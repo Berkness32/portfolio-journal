@@ -12,14 +12,31 @@ function todayLocalYYYYMMDD() {
 
 const TAG_OPTIONS = ["Cloud", "3D Art", "Web", "Math", "Security", "Programming"];
 
-export default function PostForm() {
+export default function PostForm({ initialData = null, onSubmit }) {
+  const defaultForm = useMemo(
+    () => ({
+      title: "",
+      date: todayLocalYYYYMMDD(),
+      description: "",
+      tag: TAG_OPTIONS[0],
+      link: "",
+    }),
+    []
+  );
+
   const [form, setForm] = useState({
-    title: "",
-    date: todayLocalYYYYMMDD(),
-    description: "",
-    tag: TAG_OPTIONS[0],       // default to first tag
-    link: "",                  // optional
+    ...defaultForm,
+    ...(initialData ?? {}),
   });
+
+  useEffect(() => {
+    if (initialData) {
+      setForm((prev) => ({
+        ...prev,
+        ...initialData,
+      }));
+    }
+  }, [initialData]);
 
   // Image handling
   const [imageFile, setImageFile] = useState(null);       // File | null
@@ -58,55 +75,55 @@ export default function PostForm() {
     }
   }
 
-async function handleSubmit(e) {
-  e.preventDefault();
-
-  const payload = {
-    title: form.title.trim(),
-    date: form.date,             // "YYYY-MM-DD"
-    tag: form.tag,
-    link: form.link.trim() || "", 
-    description: form.description.trim(),
-  };
-
-  if (!payload.title) {
-    alert("Please enter a title.");
-    return;
-  }
-  if (!isValidUrl(payload.link || "")) {
-    alert("Please enter a valid link (or leave it blank).");
-    return;
-  }
-
-  try {
+  async function defaultSave(payload) {
     const res = await fetch("/api/posts", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),
     });
-
     if (!res.ok) {
-      const { error } = await res.json().catch(() => ({ error: "Unknown error" }));
+      const { error } = await res.json().catch(() => ({error: "Unknown error" }));
       throw new Error(error);
     }
-
-    const { id } = await res.json(); // returned by server
-    alert(`Post saved! id: ${id}`);
-
-    // reset form
-    setForm({
-      title: "",
-      date: todayLocalYYYYMMDD(),
-      description: "",
-      tag: TAG_OPTIONS[0],
-      link: "",
-    });
-    setImageFile(null);
-  } catch (err) {
-    console.error("Save failed:", err);
-    alert(`Failed to save post: ${err.message}`);
+    const data = await res.json();
+    return data;
   }
-}
+
+  async function handleSubmit(e) {
+    e.preventDefault();
+
+    const payload = {
+      id: initialData?.id,
+      title: form.title.trim(),
+      date: form.date,             // "YYYY-MM-DD"
+      tag: form.tag,
+      link: form.link.trim() || "", 
+      description: form.description.trim(),
+    };
+
+    if (!payload.title) {
+      alert("Please enter a title.");
+      return;
+    }
+    if (!isValidUrl(payload.link || "")) {
+      alert("Please enter a valid link (or leave it blank).");
+      return;
+    }
+
+    try {
+      const result = (await onSubmit?.(payload)) ?? (await defaultSave(payload));
+      const createdId = result?.id;
+      alert(createdId ? `Post saved! id: ${createdId}` : "Post Saved!");
+
+      if (!initialData) {
+        setForm({ ...defaultForm });
+        setImageFile(null);
+      }
+    } catch (err) {
+      console.error("Save failed:", err);
+      alert(`Failed to save post: ${err.message}`);
+    }
+  }
 
   return (
     <form onSubmit={handleSubmit}>
@@ -196,7 +213,7 @@ async function handleSubmit(e) {
         placeholder="Type your message here..."
       />
 
-      <button type="submit">Submit</button>
+      <button type="submit">{initialData ? "Update" : "Submit"}</button>
     </form>
   );
 }
