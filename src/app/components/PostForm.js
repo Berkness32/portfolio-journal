@@ -92,12 +92,14 @@ export default function PostForm({ initialData = null, onSubmit }) {
   async function handleSubmit(e) {
     e.preventDefault();
 
+    const isEdit = Boolean(initialData?.id);
+
     const payload = {
       id: initialData?.id,
       title: form.title.trim(),
-      date: form.date,             // "YYYY-MM-DD"
+      date: form.date,
       tag: form.tag,
-      link: form.link.trim() || "", 
+      link: form.link.trim() || "",
       description: form.description.trim(),
     };
 
@@ -111,11 +113,35 @@ export default function PostForm({ initialData = null, onSubmit }) {
     }
 
     try {
-      const result = (await onSubmit?.(payload)) ?? (await defaultSave(payload));
-      const createdId = result?.id;
-      alert(createdId ? `Post saved! id: ${createdId}` : "Post Saved!");
+      let result;
 
-      if (!initialData) {
+      if (isEdit) {
+        // 🔒 EDIT MODE: must use onSubmit, NEVER defaultSave
+        if (!onSubmit) {
+          console.error("Edit mode but no onSubmit handler provided");
+          throw new Error("No update handler provided");
+        }
+        console.log("Submitting the update.")
+        result = await onSubmit(payload);
+      } else {
+        // CREATE MODE: use onSubmit if given, otherwise defaultSave (POST /api/posts)
+        if (onSubmit) {
+          console.log("Submitting from normal submit.")
+          result = await onSubmit(payload);
+        } else {
+          console.log("Submitting from defaultSave.")
+          result = await defaultSave(payload);
+        }
+      }
+
+      if (isEdit) {
+        // editing an existing post
+        alert("Post updated!");
+      } else {
+        // creating a new post
+        const createdId = result?.id;
+        alert(createdId ? `Post saved! id: ${createdId}` : "Post saved!");
+        // reset form only in create mode
         setForm({ ...defaultForm });
         setImageFile(null);
       }

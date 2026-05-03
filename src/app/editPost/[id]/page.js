@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
-import PostForm from "@/components/PostForm";
-import Navbar from "@/components/Navbar";
+import PostForm from "../../components/PostForm";
+import Navbar from "../../components/Navbar";
 
 export default function EditPostPage() {
   const { id } = useParams();            // /editPost/[id]
@@ -35,10 +35,17 @@ export default function EditPostPage() {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),
     });
+
+    console.log("Updating from id page. ")
+
     const data = await res.json().catch(() => ({}));
-    if (!res.ok) throw new Error(data?.error || "Update failed");
-    // optionally: show a toast / navigate back
-    alert("Post updated!");
+
+    if (!res.ok) {
+      throw new Error(data?.error || "Update failed");
+    }
+
+    // Let PostForm decide what message to show
+    return data;
   }
 
   return (

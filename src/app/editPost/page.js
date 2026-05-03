@@ -73,7 +73,7 @@ export default function EditPost() {
           {posts.map((p, i) => (
 
             <li key={p.id ?? `${p.tag}-${p.date}-${i}`}>
-              <Link href={`/${p.id}`}>
+              <Link href={`/editPost/${p.id}`}>
                 <strong>{p.title ?? "(untitled)"}</strong> — {p.date ?? "(no date)"} {p.tag ? `· ${p.tag}` : ""}
 
                 <br />
